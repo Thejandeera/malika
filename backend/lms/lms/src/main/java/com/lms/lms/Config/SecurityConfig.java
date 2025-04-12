@@ -31,11 +31,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/admin/**").permitAll()
-                        .requestMatchers("/api/items/**").permitAll()
-                        .requestMatchers("/api/employees/**").permitAll()
-                        .requestMatchers("/api/user/**").permitAll()
+//                        .requestMatchers("/api/auth/**").permitAll()
+//                        .requestMatchers("/api/admin/**").permitAll()
+//                        .requestMatchers("/api/items/**").permitAll()
+//                        .requestMatchers("/api/employees/**").permitAll()
+                        .requestMatchers("/api/quizzes/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex
