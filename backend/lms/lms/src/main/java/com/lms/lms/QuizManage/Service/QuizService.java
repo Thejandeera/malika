@@ -29,22 +29,24 @@ public class QuizService {
 
     @Transactional
     public QuizDTO createQuiz(QuizDTO quizDTO) {
-
+        // Check if ID is provided or generate a new one
         if (quizDTO.getId() == null || quizDTO.getId().isEmpty()) {
             quizDTO.setId(generateUniqueQuizId());
         } else if (quizDTO.getId().length() != 6) {
             throw new IllegalArgumentException("Quiz ID must be 6 digits");
         }
 
+        // Check if quiz with this ID already exists
+        if (quizRepository.existsById(quizDTO.getId())) {
+            throw new IllegalArgumentException("Quiz with ID " + quizDTO.getId() + " already exists");
+        }
 
         Quiz quiz = new Quiz();
         quiz.setId(quizDTO.getId());
         quiz.setName(quizDTO.getName());
         quiz.setDifficulty(quizDTO.getDifficulty());
 
-
         Quiz savedQuiz = quizRepository.save(quiz);
-
 
         if (quizDTO.getQuestions() != null) {
             for (QuestionDTO questionDTO : quizDTO.getQuestions()) {
@@ -56,12 +58,10 @@ public class QuizService {
                 question.setAnswer4(questionDTO.getAnswer4());
                 question.setCorrectAnswer(questionDTO.getCorrectAnswer());
                 question.setQuiz(savedQuiz);
-
                 questionRepository.save(question);
                 savedQuiz.getQuestions().add(question);
             }
         }
-
 
         return convertToDTO(savedQuiz);
     }
